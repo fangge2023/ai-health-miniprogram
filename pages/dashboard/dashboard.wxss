@@ -1,417 +1,341 @@
-/* pages/dashboard/dashboard.wxss */
-
 .container {
-  padding: 20rpx;
-  padding-bottom: 100rpx;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+  padding-bottom: 24px;
 }
 
-/* 头部区域 */
-.header-section {
-  margin-bottom: 30rpx;
+/* 顶部用户信息 */
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 16px;
+  background-color: #4CAF50;
+  color: white;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  overflow: hidden;
+  background-color: #e0e0e0;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  margin-right: 12px;
 }
 
 .greeting {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10rpx;
+  flex-direction: column;
 }
 
-.greeting-text {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333;
-}
-
-.date-text {
-  font-size: 24rpx;
-  color: #999;
-}
-
-.weather-info {
-  text-align: right;
-}
-
-.weather-text {
-  font-size: 24rpx;
-  color: #666;
-}
-
-/* 进度卡片 */
-.stats-card {
-  background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
-  color: #fff;
-  margin-bottom: 30rpx;
-}
-
-.stats-card .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom-color: rgba(255, 255, 255, 0.2);
-}
-
-.progress-percent {
-  font-size: 32rpx;
-  font-weight: bold;
-}
-
-.weight-display {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  margin: 30rpx 0;
-}
-
-.current-weight {
-  display: flex;
-  align-items: baseline;
-  margin-right: 20rpx;
-}
-
-.weight-value {
-  font-size: 72rpx;
-  font-weight: bold;
-}
-
-.weight-unit {
-  font-size: 24rpx;
-  margin-left: 5rpx;
-  opacity: 0.8;
-}
-
-.weight-change {
-  display: flex;
-  align-items: center;
-}
-
-.change-text {
-  font-size: 28rpx;
-  padding: 8rpx 16rpx;
-  border-radius: 20rpx;
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.change-text.positive {
-  color: #ff4444;
-}
-
-.change-text.negative {
-  color: #4CAF50;
-}
-
-.progress {
-  margin: 20rpx 0;
-  height: 12rpx;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 6rpx;
-  overflow: hidden;
-}
-
-.progress-bar {
-  height: 100%;
-  background-color: #fff;
-  border-radius: 6rpx;
-  transition: width 0.5s ease;
-}
-
-.weight-goal {
-  display: flex;
-  justify-content: space-between;
-  font-size: 24rpx;
+.hello {
+  font-size: 14px;
   opacity: 0.9;
 }
 
-/* 今日概览 */
-.today-overview {
-  margin-bottom: 30rpx;
+.username {
+  font-size: 18px;
+  font-weight: 600;
 }
 
-.overview-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20rpx;
+.date-info {
+  text-align: right;
 }
 
-.overview-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15rpx;
+.today-date {
+  font-size: 14px;
+  opacity: 0.9;
 }
 
-.overview-item {
-  background-color: #fff;
-  border-radius: 16rpx;
-  padding: 25rpx 15rpx;
-  text-align: center;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
-}
-
-.item-icon {
-  font-size: 32rpx;
-  margin-bottom: 10rpx;
-}
-
-.item-value {
-  font-size: 28rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 5rpx;
-}
-
-.item-label {
-  font-size: 20rpx;
-  color: #999;
-  margin-bottom: 2rpx;
-}
-
-.item-unit {
-  font-size: 18rpx;
-  color: #666;
-}
-
-/* 卡片样式重写 */
-.card {
-  background-color: #fff;
-  border-radius: 16rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
-  margin-bottom: 30rpx;
-  overflow: hidden;
+/* 健康数据概览卡片 */
+.health-overview {
+  background-color: white;
+  border-radius: 12px;
+  margin: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .card-header {
-  padding: 30rpx;
-  border-bottom: 1rpx solid #f0f0f0;
-  font-size: 32rpx;
-  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
   color: #333;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
-.card-body {
-  padding: 30rpx;
-}
-
-/* 热量平衡 */
-.balance-status.surplus {
-  color: #F44336;
-  font-size: 24rpx;
-}
-
-.balance-status.deficit {
-  color: #4CAF50;
-  font-size: 24rpx;
-}
-
-.calorie-chart-container {
-  height: 300rpx;
-  margin-bottom: 30rpx;
-}
-
-.calorie-details {
-  display: flex;
-  flex-direction: column;
-  gap: 15rpx;
-}
-
-.detail-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15rpx 0;
-  border-bottom: 1rpx solid #f5f5f5;
-}
-
-.detail-item:last-child {
-  border-bottom: none;
-}
-
-.detail-label {
-  font-size: 28rpx;
+.card-subtitle {
+  font-size: 12px;
   color: #666;
 }
 
-.detail-value {
-  font-size: 28rpx;
-  font-weight: bold;
-  color: #333;
-}
-
-/* 图表周期选择 */
-.chart-period {
-  display: flex;
-  gap: 20rpx;
-}
-
-.period-item {
-  font-size: 24rpx;
-  color: #999;
-  padding: 8rpx 16rpx;
-  border-radius: 20rpx;
-  background-color: #f5f5f5;
-  cursor: pointer;
-}
-
-.period-item.active {
-  color: #4CAF50;
-  background-color: #E8F5E8;
-}
-
-.chart-container {
-  height: 400rpx;
-}
-
-/* AI建议 */
-.ai-icon {
-  font-size: 28rpx;
-}
-
-.suggestion-content {
-  margin-bottom: 20rpx;
-}
-
-.suggestion-text {
-  font-size: 28rpx;
-  line-height: 1.6;
-  color: #333;
-}
-
-.suggestion-actions {
-  display: flex;
-  gap: 20rpx;
-  justify-content: flex-end;
-}
-
-/* 快捷操作 */
-.quick-actions {
-  margin-bottom: 30rpx;
-}
-
-.action-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20rpx;
-}
-
-.action-grid {
+.health-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20rpx;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  font-size: 20px;
+}
+
+.calories-icon {
+  background-color: #FFEBEE;
+}
+
+.steps-icon {
+  background-color: #E8F5E9;
+}
+
+.water-icon {
+  background-color: #E3F2FD;
+}
+
+.weight-icon {
+  background-color: #FFF8E1;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 减重进度卡片 */
+.weight-progress-card {
+  background-color: white;
+  border-radius: 12px;
+  margin: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.weight-chart {
+  margin-top: 8px;
+}
+
+.weight-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.weight-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.weight-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.weight-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.progress-container {
+  margin-top: 8px;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #e9e9e9;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #4CAF50;
+  border-radius: 4px;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+}
+
+/* 快捷功能卡片 */
+.quick-actions {
+  background-color: white;
+  border-radius: 12px;
+  margin: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 12px;
 }
 
 .action-item {
-  background-color: #fff;
-  border-radius: 16rpx;
-  padding: 30rpx 20rpx;
-  text-align: center;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.action-item:active {
-  transform: translateY(2rpx);
-  box-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .action-icon {
-  font-size: 40rpx;
-  margin-bottom: 15rpx;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  font-size: 24px;
+}
+
+.food-icon {
+  background-color: #FFEBEE;
+}
+
+.exercise-icon {
+  background-color: #E8F5E9;
+}
+
+.water-add-icon {
+  background-color: #E3F2FD;
+}
+
+.weight-add-icon {
+  background-color: #FFF8E1;
 }
 
 .action-text {
-  font-size: 24rpx;
+  font-size: 12px;
   color: #333;
 }
 
-/* 按钮样式 */
-.btn {
-  padding: 20rpx 30rpx;
-  border-radius: 25rpx;
-  font-size: 24rpx;
-  border: none;
-  text-align: center;
+/* 健康提示卡片 */
+.health-tips {
+  background-color: white;
+  border-radius: 12px;
+  margin: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.btn-primary {
-  background-color: #4CAF50;
-  color: #fff;
-}
-
-.btn-outline {
-  background-color: transparent;
-  border: 2rpx solid #4CAF50;
+.refresh-tips {
+  font-size: 14px;
   color: #4CAF50;
 }
 
-.btn-small {
-  padding: 15rpx 25rpx;
-  font-size: 22rpx;
-}
-
-/* 加载和空状态 */
-.loading {
+.tip-content {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 100rpx;
-  color: #999;
+  align-items: flex-start;
+  background-color: #f9f9f9;
+  padding: 12px;
+  border-radius: 8px;
 }
 
-.loading-spinner {
-  width: 60rpx;
-  height: 60rpx;
-  border: 4rpx solid #f3f3f3;
-  border-top: 4rpx solid #4CAF50;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 20rpx;
+.tip-icon {
+  font-size: 20px;
+  margin-right: 12px;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 100rpx 60rpx;
-  color: #999;
-}
-
-.empty-icon {
-  font-size: 80rpx;
-  margin-bottom: 30rpx;
-  opacity: 0.5;
-}
-
-.empty-text {
-  font-size: 28rpx;
-  text-align: center;
+.tip-text {
+  font-size: 14px;
+  color: #333;
   line-height: 1.5;
 }
 
-/* 响应式设计 */
-@media (max-width: 480px) {
-  .overview-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20rpx;
-  }
-  
-  .action-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20rpx;
-  }
-  
-  .overview-item,
-  .action-item {
-    padding: 30rpx 20rpx;
-  }
+/* 每周趋势卡片 */
+.weekly-trends {
+  background-color: white;
+  border-radius: 12px;
+  margin: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.view-more {
+  font-size: 14px;
+  color: #4CAF50;
+}
+
+.chart-container {
+  height: 180px;
+  margin-top: 8px;
+}
+
+.chart-placeholder {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.chart-bar {
+  width: 12%;
+  background-color: #E8F5E9;
+  border-radius: 4px 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.chart-bar.active {
+  background-color: #4CAF50;
+}
+
+.bar-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
 }

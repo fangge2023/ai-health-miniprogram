@@ -47,8 +47,8 @@ Page({
   // 初始化页面
   async initPage() {
     try {
-      // 获取用户信息
-      await this.getUserInfo();
+      // 用户信息需要在按钮点击时获取（微信安全策略）
+      // 移除了自动获取用户信息的代码
       
       // 加载聊天历史
       await this.loadChatHistory();

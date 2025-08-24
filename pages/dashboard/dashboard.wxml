@@ -1,170 +1,165 @@
-<!--pages/dashboard/dashboard.wxml-->
 <view class="container">
-  <!-- 顶部问候和日期 -->
-  <view class="header-section">
-    <view class="greeting">
-      <text class="greeting-text">{{greeting}}，{{userInfo.nickname || '用户'}}</text>
-      <text class="date-text">{{currentDate}}</text>
+  <!-- 顶部用户信息 -->
+  <view class="user-header">
+    <view class="user-info">
+      <view class="avatar">
+        <open-data type="userAvatarUrl"></open-data>
+      </view>
+      <view class="greeting">
+        <text class="hello">你好，</text>
+        <open-data type="userNickName" class="username"></open-data>
+      </view>
     </view>
-    <view class="weather-info" wx:if="{{weather}}">
-      <text class="weather-text">{{weather.temp}}°C {{weather.desc}}</text>
+    <view class="date-info">
+      <text class="today-date">{{todayDate}}</text>
     </view>
   </view>
-
-  <!-- 体重进度卡片 -->
-  <view class="card stats-card">
+  
+  <!-- 健康数据概览卡片 -->
+  <view class="health-overview">
     <view class="card-header">
-      <text>减肥进度</text>
-      <text class="progress-percent">{{progressPercent}}%</text>
+      <text class="card-title">今日健康概览</text>
     </view>
-    <view class="card-body">
-      <view class="weight-display">
-        <view class="current-weight">
-          <text class="weight-value">{{currentWeight}}</text>
-          <text class="weight-unit">kg</text>
-        </view>
-        <view class="weight-change" wx:if="{{weightChange}}">
-          <text class="change-text {{weightChange > 0 ? 'positive' : 'negative'}}">
-            {{weightChange > 0 ? '+' : ''}}{{weightChange}}kg
-          </text>
+    
+    <view class="health-stats">
+      <view class="stat-item">
+        <view class="stat-icon calories-icon">🔥</view>
+        <view class="stat-info">
+          <text class="stat-value">{{caloriesConsumed || 0}}/{{caloriesTarget || 2000}}</text>
+          <text class="stat-label">卡路里</text>
         </view>
       </view>
-      <view class="progress">
-        <view class="progress-bar" style="width: {{progressPercent}}%"></view>
+      
+      <view class="stat-item">
+        <view class="stat-icon steps-icon">👣</view>
+        <view class="stat-info">
+          <text class="stat-value">{{steps || 0}}/{{stepsTarget || 8000}}</text>
+          <text class="stat-label">步数</text>
+        </view>
       </view>
-      <view class="weight-goal">
-        <text>目标: {{targetWeight}}kg</text>
-        <text>还需: {{remainingWeight}}kg</text>
+      
+      <view class="stat-item">
+        <view class="stat-icon water-icon">💧</view>
+        <view class="stat-info">
+          <text class="stat-value">{{waterIntake || 0}}/{{waterTarget || 8}}</text>
+          <text class="stat-label">饮水(杯)</text>
+        </view>
+      </view>
+      
+      <view class="stat-item">
+        <view class="stat-icon weight-icon">⚖️</view>
+        <view class="stat-info">
+          <text class="stat-value">{{currentWeight || '--'}} kg</text>
+          <text class="stat-label">体重</text>
+        </view>
       </view>
     </view>
   </view>
-
-  <!-- 今日数据概览 -->
-  <view class="today-overview">
-    <view class="overview-title">今日概览</view>
-    <view class="overview-grid">
-      <view class="overview-item">
-        <view class="item-icon">🔥</view>
-        <view class="item-value">{{todayData.caloriesConsumed}}</view>
-        <view class="item-label">已摄入</view>
-        <view class="item-unit">kcal</view>
-      </view>
-      <view class="overview-item">
-        <view class="item-icon">🏃</view>
-        <view class="item-value">{{todayData.caloriesBurned}}</view>
-        <view class="item-label">已消耗</view>
-        <view class="item-unit">kcal</view>
-      </view>
-      <view class="overview-item">
-        <view class="item-icon">👣</view>
-        <view class="item-value">{{todayData.steps}}</view>
-        <view class="item-label">步数</view>
-        <view class="item-unit">步</view>
-      </view>
-      <view class="overview-item">
-        <view class="item-icon">💧</view>
-        <view class="item-value">{{todayData.water}}</view>
-        <view class="item-label">饮水</view>
-        <view class="item-unit">ml</view>
-      </view>
-    </view>
-  </view>
-
-  <!-- 热量平衡卡片 -->
-  <view class="card">
+  
+  <!-- 减重进度卡片 -->
+  <view class="weight-progress-card">
     <view class="card-header">
-      <text>热量平衡</text>
-      <text class="balance-status {{calorieBalance >= 0 ? 'surplus' : 'deficit'}}">
-        {{calorieBalance >= 0 ? '超出' : '不足'}} {{Math.abs(calorieBalance)}}kcal
-      </text>
+      <text class="card-title">减重进度</text>
+      <text class="card-subtitle">距离目标还有 {{daysToGoal || '--'}} 天</text>
     </view>
-    <view class="card-body">
-      <view class="calorie-chart-container">
-        <ec-canvas id="calorie-chart" canvas-id="calorie-chart" ec="{{ calorieChart }}"></ec-canvas>
+    
+    <view class="weight-chart">
+      <view class="weight-info">
+        <view class="weight-item">
+          <text class="weight-label">初始</text>
+          <text class="weight-value">{{initialWeight || '--'}} kg</text>
+        </view>
+        <view class="weight-item">
+          <text class="weight-label">当前</text>
+          <text class="weight-value">{{currentWeight || '--'}} kg</text>
+        </view>
+        <view class="weight-item">
+          <text class="weight-label">目标</text>
+          <text class="weight-value">{{targetWeight || '--'}} kg</text>
+        </view>
       </view>
-      <view class="calorie-details">
-        <view class="detail-item">
-          <text class="detail-label">基础代谢</text>
-          <text class="detail-value">{{bmr}} kcal</text>
+      
+      <view class="progress-container">
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{weightProgressPercentage || 0}}%;"></view>
         </view>
-        <view class="detail-item">
-          <text class="detail-label">目标摄入</text>
-          <text class="detail-value">{{targetCalories}} kcal</text>
-        </view>
-        <view class="detail-item">
-          <text class="detail-label">剩余可摄入</text>
-          <text class="detail-value">{{remainingCalories}} kcal</text>
-        </view>
+        <text class="progress-text">{{weightProgressPercentage || 0}}% 完成</text>
       </view>
     </view>
   </view>
-
-  <!-- 体重趋势图 -->
-  <view class="card">
-    <view class="card-header">
-      <text>体重趋势</text>
-      <view class="chart-period">
-        <text class="period-item {{chartPeriod === 'week' ? 'active' : ''}}" bindtap="changePeriod" data-period="week">周</text>
-        <text class="period-item {{chartPeriod === 'month' ? 'active' : ''}}" bindtap="changePeriod" data-period="month">月</text>
-        <text class="period-item {{chartPeriod === 'year' ? 'active' : ''}}" bindtap="changePeriod" data-period="year">年</text>
-      </view>
-    </view>
-    <view class="card-body">
-      <view class="chart-container">
-        <ec-canvas id="weight-chart" canvas-id="weight-chart" ec="{{ weightChart }}"></ec-canvas>
-      </view>
-    </view>
-  </view>
-
-  <!-- AI建议卡片 -->
-  <view class="card" wx:if="{{aiSuggestion}}">
-    <view class="card-header">
-      <text>AI智能建议</text>
-      <view class="ai-icon">🤖</view>
-    </view>
-    <view class="card-body">
-      <view class="suggestion-content">
-        <text class="suggestion-text">{{aiSuggestion.content}}</text>
-      </view>
-      <view class="suggestion-actions">
-        <button class="btn btn-outline btn-small" bindtap="viewMore">查看详情</button>
-        <button class="btn btn-primary btn-small" bindtap="goToAiConsult">AI咨询</button>
-      </view>
-    </view>
-  </view>
-
-  <!-- 快捷操作 -->
+  
+  <!-- 快捷功能卡片 -->
   <view class="quick-actions">
-    <view class="action-title">快捷操作</view>
-    <view class="action-grid">
-      <view class="action-item" bindtap="quickRecord" data-type="weight">
-        <view class="action-icon">⚖️</view>
-        <text class="action-text">记录体重</text>
-      </view>
-      <view class="action-item" bindtap="quickRecord" data-type="meal">
-        <view class="action-icon">🍽️</view>
+    <view class="action-row">
+      <view class="action-item" bindtap="navigateToDiet">
+        <view class="action-icon food-icon">🍽️</view>
         <text class="action-text">记录饮食</text>
       </view>
-      <view class="action-item" bindtap="quickRecord" data-type="exercise">
-        <view class="action-icon">🏃</view>
+      
+      <view class="action-item" bindtap="navigateToExercise">
+        <view class="action-icon exercise-icon">🏃</view>
         <text class="action-text">记录运动</text>
       </view>
-      <view class="action-item" bindtap="quickRecord" data-type="water">
-        <view class="action-icon">💧</view>
-        <text class="action-text">喝水提醒</text>
+      
+      <view class="action-item" bindtap="navigateToWater">
+        <view class="action-icon water-add-icon">💧</view>
+        <text class="action-text">添加饮水</text>
+      </view>
+      
+      <view class="action-item" bindtap="navigateToWeight">
+        <view class="action-icon weight-add-icon">⚖️</view>
+        <text class="action-text">更新体重</text>
       </view>
     </view>
   </view>
-
-  <!-- 加载状态 -->
-  <view class="loading" wx:if="{{loading}}">
-    <view class="loading-spinner"></view>
-    <text>加载中...</text>
+  
+  <!-- 健康提示卡片 -->
+  <view class="health-tips">
+    <view class="card-header">
+      <text class="card-title">今日健康提示</text>
+      <text class="refresh-tips" bindtap="refreshTips">换一条</text>
+    </view>
+    
+    <view class="tip-content">
+      <view class="tip-icon">💡</view>
+      <text class="tip-text">{{dailyTip || '保持规律的运动习惯可以帮助提高基础代谢率，即使在休息时也能消耗更多热量。'}}</text>
+    </view>
   </view>
-
-  <!-- 空状态 -->
-  <view class="empty" wx:if="{{!loading && !hasData}}">
-    <view class="empty-icon">📊</view>
-    <text class="empty-text">暂无数据\n点击快捷操作开始记录</text>
+  
+  <!-- 每周趋势卡片 -->
+  <view class="weekly-trends">
+    <view class="card-header">
+      <text class="card-title">每周趋势</text>
+      <text class="view-more" bindtap="viewMoreStats">查看更多</text>
+    </view>
+    
+    <view class="chart-container">
+      <!-- 这里可以放置图表组件 -->
+      <view class="chart-placeholder">
+        <view class="bar-chart">
+          <view class="chart-bar" style="height: 30%;">
+            <text class="bar-label">一</text>
+          </view>
+          <view class="chart-bar" style="height: 45%;">
+            <text class="bar-label">二</text>
+          </view>
+          <view class="chart-bar" style="height: 60%;">
+            <text class="bar-label">三</text>
+          </view>
+          <view class="chart-bar" style="height: 40%;">
+            <text class="bar-label">四</text>
+          </view>
+          <view class="chart-bar" style="height: 70%;">
+            <text class="bar-label">五</text>
+          </view>
+          <view class="chart-bar" style="height: 50%;">
+            <text class="bar-label">六</text>
+          </view>
+          <view class="chart-bar active" style="height: 65%;">
+            <text class="bar-label">日</text>
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

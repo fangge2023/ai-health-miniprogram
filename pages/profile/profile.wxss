@@ -1,0 +1,379 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+  padding-bottom: 24px;
+}
+
+.profile-header {
+  background-color: #4CAF50;
+  padding: 24px 16px;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.avatar-container {
+  position: relative;
+  margin-right: 16px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+  overflow: hidden;
+  background-color: #e0e0e0;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+.login-btn-container {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.login-btn {
+  background-color: white;
+  color: #4CAF50;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
+  flex: 1;
+}
+
+.username {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.user-stats {
+  display: flex;
+  align-items: center;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.stat-label {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.5);
+  margin: 0 16px;
+}
+
+.card {
+  background-color: white;
+  border-radius: 12px;
+  margin: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-action {
+  font-size: 14px;
+  color: #4CAF50;
+}
+
+.goal-progress {
+  margin-bottom: 8px;
+}
+
+.goal-item {
+  margin-bottom: 16px;
+}
+
+.goal-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.goal-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.goal-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.goal-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.progress-container {
+  margin-top: 12px;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #e9e9e9;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #4CAF50;
+  border-radius: 4px;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #666;
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.info-value {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-label {
+  font-size: 14px;
+  color: #333;
+}
+
+.setting-arrow {
+  font-size: 14px;
+  color: #999;
+}
+
+/* 添加饮食页面样式 */
+.diet-card {
+  background-color: white;
+  border-radius: 12px;
+  margin: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.date-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #f0f9eb;
+  border-radius: 12px;
+  margin: 16px 16px 0;
+}
+
+.arrow {
+  font-size: 18px;
+  color: #4CAF50;
+  padding: 4px 12px;
+}
+
+.current-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.today-label {
+  font-size: 12px;
+  color: #4CAF50;
+  margin-top: 4px;
+}
+
+.stats-card {
+  background-color: #4CAF50;
+  border-radius: 12px;
+  margin: 16px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 16px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.nutrition-progress {
+  margin-top: 16px;
+}
+
+.progress-item {
+  margin-bottom: 12px;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  padding-bottom: 8px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.tabs {
+  display: flex;
+}
+
+.tab {
+  padding: 4px 12px;
+  font-size: 14px;
+  color: #666;
+  border-radius: 16px;
+}
+
+.tab.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.food-list {
+  padding: 0 16px;
+}
+
+.food-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.food-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.food-name {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.food-amount {
+  font-size: 14px;
+  color: #666;
+}
+
+.food-calories {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4CAF50;
+}
+
+.add-food {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0;
+  color: #4CAF50;
+}
+
+.add-icon {
+  font-size: 20px;
+  margin-right: 8px;
+}

@@ -78,22 +78,30 @@ App({
     this.globalData.currentDate = new Date().toISOString().split('T')[0];
   },
 
-  // 获取用户信息
+  // 获取用户信息（必须在按钮点击事件中调用）
   getUserInfo() {
     return new Promise((resolve, reject) => {
       if (this.globalData.userInfo) {
         resolve(this.globalData.userInfo);
       } else {
-        wx.getUserProfile({
-          desc: '用于完善会员资料',
-          success: (res) => {
-            this.globalData.userInfo = res.userInfo;
-            this.globalData.isLoggedIn = true;
-            resolve(res.userInfo);
-          },
-          fail: reject
-        });
+        // 提示用户需要点击按钮获取信息
+        reject(new Error('请点击登录按钮获取用户信息'));
       }
+    });
+  },
+
+  // 用户点击按钮获取用户信息
+  getUserProfileByClick() {
+    return new Promise((resolve, reject) => {
+      wx.getUserProfile({
+        desc: '用于完善会员资料',
+        success: (res) => {
+          this.globalData.userInfo = res.userInfo;
+          this.globalData.isLoggedIn = true;
+          resolve(res.userInfo);
+        },
+        fail: reject
+      });
     });
   },
 

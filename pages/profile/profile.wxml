@@ -1,74 +1,107 @@
-<!--pages/profile/profile.wxml-->
 <view class="container">
   <!-- 用户信息卡片 -->
-  <view class="user-card">
-    <view class="user-avatar">
-      <image class="avatar-img" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" />
-      <button class="avatar-edit" bindtap="changeAvatar">📷</button>
+  <view class="profile-header">
+    <view class="avatar-container">
+      <view class="avatar">
+        <open-data type="userAvatarUrl"></open-data>
+      </view>
+      <view wx:if="{{!hasUserInfo}}" class="login-btn-container">
+        <button class="login-btn" open-type="getUserInfo" bindgetuserinfo="getUserInfo">登录</button>
+      </view>
     </view>
     <view class="user-info">
-      <text class="user-name">{{userInfo.nickname || '未设置昵称'}}</text>
-      <text class="user-desc">{{userStatus}}</text>
+      <view class="username">
+        <open-data type="userNickName" wx:if="{{hasUserInfo}}"></open-data>
+        <text wx:else>未登录</text>
+      </view>
+      <view class="user-stats">
+        <view class="stat">
+          <text class="stat-value">{{userDays || 0}}</text>
+          <text class="stat-label">坚持天数</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat">
+          <text class="stat-value">{{weightLoss || 0}}kg</text>
+          <text class="stat-label">已减重</text>
+        </view>
+      </view>
     </view>
   </view>
-
-  <!-- 目标设置 -->
+  
+  <!-- 健康目标卡片 -->
   <view class="card">
-    <view class="card-header">减肥目标</view>
-    <view class="goal-item" bindtap="setGoal" data-type="weight">
-      <text class="goal-label">目标体重</text>
-      <text class="goal-value">{{goals.targetWeight || '未设置'}}kg</text>
+    <view class="card-header">
+      <text class="card-title">健康目标</text>
+      <text class="card-action" bindtap="editGoals">编辑</text>
     </view>
-    <view class="goal-item" bindtap="setGoal" data-type="date">
-      <text class="goal-label">目标日期</text>
-      <text class="goal-value">{{goals.targetDate || '未设置'}}</text>
+    
+    <view class="goal-progress">
+      <view class="goal-item">
+        <view class="goal-info">
+          <text class="goal-label">目标体重</text>
+          <text class="goal-value">{{targetWeight || '未设置'}} kg</text>
+        </view>
+        <view class="goal-date">目标日期: {{targetDate || '未设置'}}</view>
+      </view>
+      
+      <view class="progress-container" wx:if="{{targetWeight && currentWeight}}">
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{weightProgress}}%;"></view>
+        </view>
+        <view class="progress-labels">
+          <text>当前: {{currentWeight}}kg</text>
+          <text>目标: {{targetWeight}}kg</text>
+        </view>
+      </view>
     </view>
   </view>
-
-  <!-- 基本信息 -->
+  
+  <!-- 基本信息卡片 -->
   <view class="card">
-    <view class="card-header">基本信息</view>
-    <view class="info-item" bindtap="editInfo" data-type="gender">
-      <text class="info-label">性别</text>
-      <text class="info-value">{{userInfo.gender || '未设置'}}</text>
+    <view class="card-header">
+      <text class="card-title">基本信息</text>
+      <text class="card-action" bindtap="editBasicInfo">编辑</text>
     </view>
-    <view class="info-item" bindtap="editInfo" data-type="age">
-      <text class="info-label">年龄</text>
-      <text class="info-value">{{userInfo.age || '未设置'}}岁</text>
-    </view>
-    <view class="info-item" bindtap="editInfo" data-type="height">
-      <text class="info-label">身高</text>
-      <text class="info-value">{{userInfo.height || '未设置'}}cm</text>
+    
+    <view class="info-list">
+      <view class="info-item">
+        <text class="info-label">性别</text>
+        <text class="info-value">{{gender || '未设置'}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">年龄</text>
+        <text class="info-value">{{age || '未设置'}}岁</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">身高</text>
+        <text class="info-value">{{height || '未设置'}}cm</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">体重</text>
+        <text class="info-value">{{currentWeight || '未设置'}}kg</text>
+      </view>
     </view>
   </view>
-
-  <!-- 设置选项 -->
+  
+  <!-- 设置卡片 -->
   <view class="card">
-    <view class="card-header">设置</view>
-    <view class="setting-item" bindtap="openSetting" data-type="notification">
-      <text class="setting-label">消息通知</text>
-      <switch checked="{{settings.notification}}" bindchange="toggleSetting" data-type="notification" />
+    <view class="card-header">
+      <text class="card-title">设置</text>
     </view>
-    <view class="setting-item" bindtap="openSetting" data-type="privacy">
-      <text class="setting-label">隐私设置</text>
-      <text class="setting-arrow">></text>
-    </view>
-  </view>
-
-  <!-- 其他功能 -->
-  <view class="card">
-    <view class="card-header">其他</view>
-    <view class="function-item" bindtap="exportData">
-      <text class="function-label">导出数据</text>
-      <text class="function-arrow">></text>
-    </view>
-    <view class="function-item" bindtap="feedback">
-      <text class="function-label">意见反馈</text>
-      <text class="function-arrow">></text>
-    </view>
-    <view class="function-item" bindtap="about">
-      <text class="function-label">关于应用</text>
-      <text class="function-arrow">></text>
+    
+    <view class="settings-list">
+      <view class="setting-item">
+        <text class="setting-label">消息通知</text>
+        <switch checked="{{notificationsEnabled}}" bindchange="toggleNotifications" color="#4CAF50"/>
+      </view>
+      <view class="setting-item" bindtap="navigateToPrivacySettings">
+        <text class="setting-label">隐私设置</text>
+        <text class="setting-arrow">></text>
+      </view>
+      <view class="setting-item" bindtap="showAboutInfo">
+        <text class="setting-label">关于我们</text>
+        <text class="setting-arrow">></text>
+      </view>
     </view>
   </view>
 </view>
