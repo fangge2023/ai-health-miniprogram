@@ -1,0 +1,224 @@
+<!--pages/exercise/exercise.wxml-->
+<view class="container">
+  <!-- 日期选择器 -->
+  <view class="date-selector">
+    <view class="date-nav">
+      <button class="nav-btn" bindtap="changeDate" data-direction="prev">‹</button>
+      <view class="date-display" bindtap="pickDate">
+        <text class="date-text">{{selectedDate}}</text>
+        <text class="date-desc">{{dateDesc}}</text>
+      </view>
+      <button class="nav-btn" bindtap="changeDate" data-direction="next">›</button>
+    </view>
+  </view>
+
+  <!-- 今日运动统计 -->
+  <view class="card stats-card">
+    <view class="stats-header">
+      <text class="stats-title">今日运动</text>
+      <view class="achievement-badge" wx:if="{{hasAchievement}}">
+        <text class="badge-text">🏆 达标</text>
+      </view>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-value">{{todayStats.duration}}</text>
+        <text class="stat-label">运动时长</text>
+        <text class="stat-unit">分钟</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{todayStats.calories}}</text>
+        <text class="stat-label">消耗热量</text>
+        <text class="stat-unit">kcal</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{todayStats.count}}</text>
+        <text class="stat-label">运动次数</text>
+        <text class="stat-unit">次</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{todayStats.steps}}</text>
+        <text class="stat-label">步数</text>
+        <text class="stat-unit">步</text>
+      </view>
+    </view>
+    
+    <!-- 目标进度 -->
+    <view class="goal-progress">
+      <view class="progress-header">
+        <text class="progress-label">今日目标进度</text>
+        <text class="progress-percent">{{goalProgress}}%</text>
+      </view>
+      <view class="progress-bar-container">
+        <view class="progress-bar" style="width: {{goalProgress}}%"></view>
+      </view>
+      <text class="progress-goal">目标: {{dailyGoal}}分钟</text>
+    </view>
+  </view>
+
+  <!-- 快捷运动选择 -->
+  <view class="quick-exercise-section">
+    <view class="section-header">
+      <text class="section-title">快捷运动</text>
+      <text class="section-more" bindtap="viewAllExercises">更多 ></text>
+    </view>
+    <scroll-view class="exercise-scroll" scroll-x="true">
+      <view class="exercise-grid">
+        <block wx:for="{{quickExercises}}" wx:key="id">
+          <view class="exercise-item" bindtap="startExercise" data-exercise="{{item}}">
+            <view class="exercise-icon">{{item.icon}}</view>
+            <text class="exercise-name">{{item.name}}</text>
+            <text class="exercise-met">{{item.met}} MET</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 运动计时器 -->
+  <view class="timer-section" wx:if="{{currentExercise}}">
+    <view class="card timer-card">
+      <view class="timer-header">
+        <text class="timer-title">{{currentExercise.name}}</text>
+        <button class="stop-btn" bindtap="stopExercise">结束</button>
+      </view>
+      <view class="timer-display">
+        <text class="timer-time">{{formatTime(elapsedTime)}}</text>
+        <text class="timer-calories">已消耗 {{currentCalories}} kcal</text>
+      </view>
+      <view class="timer-controls">
+        <button class="timer-btn {{isRunning ? 'pause' : 'start'}}" bindtap="toggleTimer">
+          {{isRunning ? '暂停' : '开始'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 运动记录列表 -->
+  <view class="records-section">
+    <view class="section-header">
+      <text class="section-title">今日记录</text>
+      <view class="view-toggle">
+        <text class="toggle-item {{recordView === 'list' ? 'active' : ''}}" bindtap="switchRecordView" data-view="list">列表</text>
+        <text class="toggle-item {{recordView === 'chart' ? 'active' : ''}}" bindtap="switchRecordView" data-view="chart">图表</text>
+      </view>
+    </view>
+    
+    <!-- 列表视图 -->
+    <view class="records-list" wx:if="{{recordView === 'list'}}">
+      <block wx:for="{{exerciseRecords}}" wx:key="id">
+        <view class="record-item">
+          <view class="record-icon">{{item.icon}}</view>
+          <view class="record-info">
+            <text class="record-name">{{item.exerciseName}}</text>
+            <text class="record-time">{{item.startTime}} - {{item.endTime}}</text>
+            <view class="record-details">
+              <text class="detail-item">⏱️ {{item.duration}}分钟</text>
+              <text class="detail-item">🔥 {{item.caloriesBurned}}kcal</text>
+              <text class="detail-item" wx:if="{{item.distance}}">📍 {{item.distance}}km</text>
+              <text class="detail-item" wx:if="{{item.steps}}">👣 {{item.steps}}步</text>
+            </view>
+          </view>
+          <view class="record-actions">
+            <button class="action-btn edit" bindtap="editRecord" data-id="{{item.id}}">✏️</button>
+            <button class="action-btn delete" bindtap="deleteRecord" data-id="{{item.id}}">🗑️</button>
+          </view>
+        </view>
+      </block>
+      
+      <!-- 空状态 -->
+      <view class="empty-records" wx:if="{{exerciseRecords.length === 0}}">
+        <view class="empty-icon">🏃</view>
+        <text class="empty-text">今日还没有运动记录</text>
+        <text class="empty-hint">选择一项运动开始吧！</text>
+      </view>
+    </view>
+    
+    <!-- 图表视图 -->
+    <view class="records-chart" wx:if="{{recordView === 'chart'}}">
+      <view class="chart-container">
+        <ec-canvas id="exercise-chart" canvas-id="exercise-chart" ec="{{ exerciseChart }}"></ec-canvas>
+      </view>
+    </view>
+  </view>
+
+  <!-- 运动历史统计 -->
+  <view class="history-stats">
+    <view class="section-title">本周统计</view>
+    <view class="weekly-chart">
+      <view class="chart-container">
+        <ec-canvas id="weekly-chart" canvas-id="weekly-chart" ec="{{ weeklyChart }}"></ec-canvas>
+      </view>
+    </view>
+  </view>
+
+  <!-- 浮动添加按钮 -->
+  <view class="fab-container">
+    <button class="fab-main {{fabExpanded ? 'expanded' : ''}}" bindtap="toggleFab">
+      <text class="fab-icon">{{fabExpanded ? '×' : '+'}}</text>
+    </button>
+    
+    <view class="fab-options {{fabExpanded ? 'show' : 'hide'}}">
+      <button class="fab-option" bindtap="quickStart">
+        <text class="option-icon">⚡</text>
+        <text class="option-text">快速开始</text>
+      </button>
+      <button class="fab-option" bindtap="customExercise">
+        <text class="option-icon">✏️</text>
+        <text class="option-text">自定义运动</text>
+      </button>
+      <button class="fab-option" bindtap="importFromHealth">
+        <text class="option-icon">📱</text>
+        <text class="option-text">导入数据</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 运动详情弹窗 -->
+  <view class="exercise-modal {{showExerciseModal ? 'show' : 'hide'}}" catchtouchmove="true">
+    <view class="modal-backdrop" bindtap="closeExerciseModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{selectedExercise.name}}</text>
+        <button class="modal-close" bindtap="closeExerciseModal">×</button>
+      </view>
+      <view class="modal-body">
+        <view class="exercise-info">
+          <view class="info-item">
+            <text class="info-label">运动强度</text>
+            <text class="info-value">{{selectedExercise.intensity}}</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">消耗热量</text>
+            <text class="info-value">{{selectedExercise.caloriesPerMin}} kcal/分钟</text>
+          </view>
+          <view class="info-item">
+            <text class="info-label">建议时长</text>
+            <text class="info-value">{{selectedExercise.recommendedDuration}} 分钟</text>
+          </view>
+        </view>
+        
+        <view class="duration-input">
+          <text class="input-label">预计运动时长</text>
+          <view class="input-row">
+            <button class="duration-btn" bindtap="changeDuration" data-change="-5">-5</button>
+            <input class="duration-value" type="number" value="{{plannedDuration}}" bindinput="onDurationInput" />
+            <text class="duration-unit">分钟</text>
+            <button class="duration-btn" bindtap="changeDuration" data-change="5">+5</button>
+          </view>
+          <text class="estimated-calories">预计消耗 {{estimatedCalories}} kcal</text>
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="closeExerciseModal">取消</button>
+        <button class="modal-btn confirm" bindtap="confirmStartExercise">开始运动</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+</view>

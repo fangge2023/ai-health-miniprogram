@@ -1,0 +1,10 @@
+<!--ec-canvas/ec-canvas.wxml-->
+<canvas 
+  type="2d" 
+  class="ec-canvas" 
+  canvas-id="{{ canvasId }}" 
+  bindinit="init" 
+  bindtouchstart="touchStart" 
+  bindtouchmove="touchMove" 
+  bindtouchend="touchEnd">
+</canvas>

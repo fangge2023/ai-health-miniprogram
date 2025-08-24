@@ -1,0 +1,67 @@
+{
+  "pages": [
+    "pages/dashboard/dashboard",
+    "pages/ai-consult/ai-consult",
+    "pages/diet/diet",
+    "pages/exercise/exercise",
+    "pages/food-search/food-search",
+    "pages/health/health",
+    "pages/profile/profile",
+    "pages/test/test"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4CAF50",
+    "navigationBarTitleText": "AI健康减肥",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#4CAF50",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/dashboard/dashboard",
+        "text": "首页",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/ai-consult/ai-consult",
+        "text": "AI咨询",
+        "iconPath": "images/tab-ai.png",
+        "selectedIconPath": "images/tab-ai-active.png"
+      },
+      {
+        "pagePath": "pages/diet/diet",
+        "text": "饮食",
+        "iconPath": "images/tab-diet.png",
+        "selectedIconPath": "images/tab-diet-active.png"
+      },
+      {
+        "pagePath": "pages/exercise/exercise",
+        "text": "运动",
+        "iconPath": "images/tab-exercise.png",
+        "selectedIconPath": "images/tab-exercise-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/tab-profile.png",
+        "selectedIconPath": "images/tab-profile-active.png"
+      }
+    ]
+  },
+  "cloud": true,
+  "plugins": {},
+  "requiredBackgroundModes": ["audio"],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于记录运动轨迹"
+    }
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

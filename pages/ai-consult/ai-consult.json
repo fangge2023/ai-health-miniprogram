@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "AI健康咨询",
+  "navigationBarBackgroundColor": "#4CAF50",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#f8f9fa",
+  "enablePullDownRefresh": false,
+  "onReachBottomDistance": 50
+}

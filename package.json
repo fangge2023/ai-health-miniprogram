@@ -1,0 +1,46 @@
+{
+  "name": "ai-health-miniprogram",
+  "version": "1.0.0",
+  "description": "AI健康减肥小程序",
+  "main": "app.js",
+  "scripts": {
+    "deploy": "node deploy-all.js",
+    "deploy:ai-chat": "cd cloudfunctions/ai-chat && npm install",
+    "deploy:get-food-data": "cd cloudfunctions/get-food-data && npm install",
+    "deploy:get-user-data": "cd cloudfunctions/get-user-data && npm install",
+    "deploy:update-user-data": "cd cloudfunctions/update-user-data && npm install",
+    "deploy:record-exercise": "cd cloudfunctions/record-exercise && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .js,.ts",
+    "format": "prettier --write \"**/*.{js,ts,json,md}\""
+  },
+  "keywords": [
+    "wechat",
+    "miniprogram",
+    "health",
+    "fitness",
+    "ai",
+    "diet",
+    "exercise"
+  ],
+  "author": "AI Health Team",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^2.8.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/ai-health-miniprogram.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/ai-health-miniprogram/issues"
+  },
+  "homepage": "https://github.com/your-username/ai-health-miniprogram#readme",
+  "dependencies": {
+    "canvas": "^3.2.0"
+  }
+}

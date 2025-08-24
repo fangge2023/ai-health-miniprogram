@@ -1,0 +1,181 @@
+<!--pages/ai-consult/ai-consult.wxml-->
+<view class="container">
+  <!-- 聊天消息列表 -->
+  <scroll-view 
+    class="chat-container" 
+    scroll-y="true" 
+    scroll-top="{{scrollTop}}" 
+    scroll-into-view="{{scrollIntoView}}"
+    enhanced="true"
+    show-scrollbar="false">
+    
+    <!-- 欢迎消息 -->
+    <view class="welcome-message" wx:if="{{messages.length === 0 && !loading}}">
+      <view class="welcome-avatar">🤖</view>
+      <view class="welcome-content">
+        <text class="welcome-title">你好！我是你的AI健康助手</text>
+        <text class="welcome-desc">我可以帮助你制定减肥计划、分析饮食和运动数据，回答健康相关问题。</text>
+        <view class="quick-questions">
+          <view class="question-title">快速提问：</view>
+          <view class="question-item" bindtap="quickQuestion" data-question="我今天应该吃什么？">
+            🍽️ 我今天应该吃什么？
+          </view>
+          <view class="question-item" bindtap="quickQuestion" data-question="推荐一些适合减肥的运动">
+            🏃 推荐一些适合减肥的运动
+          </view>
+          <view class="question-item" bindtap="quickQuestion" data-question="我的减肥进度如何？">
+            📊 我的减肥进度如何？
+          </view>
+          <view class="question-item" bindtap="quickQuestion" data-question="如何提高基础代谢率？">
+            🔥 如何提高基础代谢率？
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 消息列表 -->
+    <view class="message-list">
+      <block wx:for="{{messages}}" wx:key="id">
+        <view class="message-item {{item.type}}" id="msg-{{index}}">
+          
+          <!-- 用户消息 -->
+          <view class="message-user" wx:if="{{item.type === 'user'}}">
+            <view class="message-content">
+              <text class="message-text">{{item.content}}</text>
+              <view class="message-time">{{item.time}}</view>
+            </view>
+            <view class="message-avatar">
+              <image src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" class="avatar-img" />
+            </view>
+          </view>
+
+          <!-- AI消息 -->
+          <view class="message-ai" wx:if="{{item.type === 'ai'}}">
+            <view class="message-avatar">
+              <view class="ai-avatar">🤖</view>
+            </view>
+            <view class="message-content">
+              <view class="message-text">
+                <text wx:if="{{item.typing}}" class="typing-text">{{item.typingText}}</text>
+                <text wx:else>{{item.content}}</text>
+              </view>
+              <view class="message-time" wx:if="{{!item.typing}}">{{item.time}}</view>
+              
+              <!-- AI消息附加信息 -->
+              <view class="message-extras" wx:if="{{item.suggestions && item.suggestions.length > 0}}">
+                <view class="suggestions-title">相关建议：</view>
+                <view class="suggestions-list">
+                  <block wx:for="{{item.suggestions}}" wx:for-item="suggestion" wx:key="*this">
+                    <view class="suggestion-item" bindtap="applySuggestion" data-suggestion="{{suggestion}}">
+                      {{suggestion}}
+                    </view>
+                  </block>
+                </view>
+              </view>
+
+              <!-- 操作按钮 -->
+              <view class="message-actions" wx:if="{{!item.typing}}">
+                <view class="action-btn" bindtap="copyMessage" data-content="{{item.content}}">
+                  📋 复制
+                </view>
+                <view class="action-btn" bindtap="likeMessage" data-id="{{item.id}}">
+                  {{item.liked ? '❤️' : '🤍'}} {{item.liked ? '已赞' : '点赞'}}
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <!-- 系统消息 -->
+          <view class="message-system" wx:if="{{item.type === 'system'}}">
+            <view class="system-content">
+              <text class="system-text">{{item.content}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- AI思考中... -->
+    <view class="thinking-indicator" wx:if="{{aiThinking}}">
+      <view class="thinking-avatar">🤖</view>
+      <view class="thinking-content">
+        <view class="thinking-dots">
+          <view class="dot"></view>
+          <view class="dot"></view>
+          <view class="dot"></view>
+        </view>
+        <text class="thinking-text">AI正在思考中...</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 输入区域 -->
+  <view class="input-container">
+    <!-- 功能按钮 -->
+    <view class="function-buttons" wx:if="{{showFunctions}}">
+      <view class="function-btn" bindtap="analyzeData">
+        📊 数据分析
+      </view>
+      <view class="function-btn" bindtap="getDietPlan">
+        🍽️ 饮食计划
+      </view>
+      <view class="function-btn" bindtap="getExercisePlan">
+        🏃 运动计划
+      </view>
+      <view class="function-btn" bindtap="getHealthTips">
+        💡 健康贴士
+      </view>
+    </view>
+
+    <!-- 输入框 -->
+    <view class="input-wrapper">
+      <view class="input-row">
+        <button class="function-toggle-btn" bindtap="toggleFunctions">
+          {{showFunctions ? '✕' : '⚡'}}
+        </button>
+        
+        <input 
+          class="message-input" 
+          placeholder="请输入你的问题..." 
+          value="{{inputText}}" 
+          bindinput="onInput"
+          confirm-type="send"
+          bindconfirm="sendMessage"
+          focus="{{inputFocus}}"
+          cursor-spacing="20"
+        />
+        
+        <button 
+          class="send-btn {{inputText.trim() ? 'active' : 'disabled'}}" 
+          bindtap="sendMessage"
+          disabled="{{!inputText.trim() || sending}}"
+        >
+          {{sending ? '...' : '发送'}}
+        </button>
+      </view>
+    </view>
+
+    <!-- 语音输入（可选功能） -->
+    <view class="voice-input" wx:if="{{showVoice}}">
+      <button class="voice-btn" bindtap="startVoiceInput">
+        🎤 语音输入
+      </button>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-overlay" wx:if="{{loading}}">
+    <view class="loading-content">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载聊天记录...</text>
+    </view>
+  </view>
+
+  <!-- 错误提示 -->
+  <view class="error-message" wx:if="{{errorMessage}}">
+    <view class="error-content">
+      <text class="error-text">{{errorMessage}}</text>
+      <button class="retry-btn" bindtap="retryLastMessage">重试</button>
+    </view>
+  </view>
+</view>

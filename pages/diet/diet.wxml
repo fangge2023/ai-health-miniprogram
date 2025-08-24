@@ -1,0 +1,233 @@
+<!--pages/diet/diet.wxml-->
+<view class="container">
+  <!-- 日期选择器 -->
+  <view class="date-selector">
+    <view class="date-nav">
+      <button class="nav-btn" bindtap="changeDate" data-direction="prev">‹</button>
+      <view class="date-display" bindtap="pickDate">
+        <text class="date-text">{{selectedDate}}</text>
+        <text class="date-desc">{{dateDesc}}</text>
+      </view>
+      <button class="nav-btn" bindtap="changeDate" data-direction="next">›</button>
+    </view>
+  </view>
+
+  <!-- 热量统计卡片 -->
+  <view class="card calorie-summary">
+    <view class="summary-row">
+      <view class="summary-item consumed">
+        <view class="item-value">{{totalCalories}}</view>
+        <view class="item-label">已摄入 (kcal)</view>
+      </view>
+      <view class="summary-divider">-</view>
+      <view class="summary-item burned">
+        <view class="item-value">{{exerciseCalories}}</view>
+        <view class="item-label">已消耗 (kcal)</view>
+      </view>
+      <view class="summary-divider">=</view>
+      <view class="summary-item remaining {{remainingCalories < 0 ? 'negative' : 'positive'}}">
+        <view class="item-value">{{Math.abs(remainingCalories)}}</view>
+        <view class="item-label">{{remainingCalories < 0 ? '超出' : '剩余'}} (kcal)</view>
+      </view>
+    </view>
+    
+    <!-- 热量进度条 -->
+    <view class="calorie-progress">
+      <view class="progress-bar-container">
+        <view class="progress-bar consumed" style="width: {{consumedPercent}}%"></view>
+        <view class="progress-bar burned" style="width: {{burnedPercent}}%; left: {{consumedPercent}}%"></view>
+      </view>
+      <view class="progress-labels">
+        <text class="label-start">0</text>
+        <text class="label-end">{{targetCalories}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 营养素统计 -->
+  <view class="card nutrition-stats">
+    <view class="card-header">
+      <text>营养素摄入</text>
+      <view class="stats-toggle">
+        <text class="toggle-item {{nutritionView === 'amount' ? 'active' : ''}}" bindtap="switchNutritionView" data-view="amount">克数</text>
+        <text class="toggle-item {{nutritionView === 'percent' ? 'active' : ''}}" bindtap="switchNutritionView" data-view="percent">比例</text>
+      </view>
+    </view>
+    <view class="card-body">
+      <view class="nutrition-grid">
+        <view class="nutrition-item">
+          <view class="nutrition-circle carbs">
+            <view class="circle-progress" style="--progress: {{nutritionData.carbs.percent}}%">
+              <text class="circle-text">
+                {{nutritionView === 'amount' ? nutritionData.carbs.amount + 'g' : nutritionData.carbs.percent + '%'}}
+              </text>
+            </view>
+          </view>
+          <text class="nutrition-label">碳水化合物</text>
+        </view>
+        <view class="nutrition-item">
+          <view class="nutrition-circle protein">
+            <view class="circle-progress" style="--progress: {{nutritionData.protein.percent}}%">
+              <text class="circle-text">
+                {{nutritionView === 'amount' ? nutritionData.protein.amount + 'g' : nutritionData.protein.percent + '%'}}
+              </text>
+            </view>
+          </view>
+          <text class="nutrition-label">蛋白质</text>
+        </view>
+        <view class="nutrition-item">
+          <view class="nutrition-circle fat">
+            <view class="circle-progress" style="--progress: {{nutritionData.fat.percent}}%">
+              <text class="circle-text">
+                {{nutritionView === 'amount' ? nutritionData.fat.amount + 'g' : nutritionData.fat.percent + '%'}}
+              </text>
+            </view>
+          </view>
+          <text class="nutrition-label">脂肪</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 餐次列表 -->
+  <view class="meals-container">
+    <block wx:for="{{meals}}" wx:key="type">
+      <view class="meal-card">
+        <view class="meal-header" bindtap="toggleMeal" data-type="{{item.type}}">
+          <view class="meal-info">
+            <view class="meal-icon">{{item.icon}}</view>
+            <view class="meal-details">
+              <text class="meal-name">{{item.name}}</text>
+              <text class="meal-calories">{{item.totalCalories}} kcal</text>
+            </view>
+          </view>
+          <view class="meal-actions">
+            <button class="add-food-btn" bindtap="addFood" data-meal="{{item.type}}" catchtap="true">
+              <text class="add-icon">+</text>
+            </button>
+            <view class="expand-icon {{item.expanded ? 'expanded' : ''}}">
+              <text>‹</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 食物列表 -->
+        <view class="food-list {{item.expanded ? 'show' : 'hide'}}">
+          <block wx:for="{{item.foods}}" wx:for-item="food" wx:key="id">
+            <view class="food-item">
+              <view class="food-info">
+                <image class="food-image" src="{{food.image || '/images/default-food.png'}}" />
+                <view class="food-details">
+                  <text class="food-name">{{food.name}}</text>
+                  <text class="food-amount">{{food.amount}}{{food.unit}}</text>
+                  <text class="food-calories">{{food.calories}} kcal</text>
+                </view>
+              </view>
+              <view class="food-actions">
+                <button class="action-btn edit" bindtap="editFood" data-meal="{{item.type}}" data-food="{{food.id}}">
+                  ✏️
+                </button>
+                <button class="action-btn delete" bindtap="deleteFood" data-meal="{{item.type}}" data-food="{{food.id}}">
+                  🗑️
+                </button>
+              </view>
+            </view>
+          </block>
+          
+          <!-- 空状态 -->
+          <view class="empty-meal" wx:if="{{item.foods.length === 0}}">
+            <text class="empty-text">还没有添加食物</text>
+            <text class="empty-hint">点击 + 按钮添加食物</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 快捷添加 -->
+  <view class="quick-add-section">
+    <view class="section-title">快捷添加</view>
+    <scroll-view class="quick-foods" scroll-x="true">
+      <block wx:for="{{quickFoods}}" wx:key="id">
+        <view class="quick-food-item" bindtap="quickAdd" data-food="{{item}}">
+          <image class="quick-food-image" src="{{item.image}}" />
+          <text class="quick-food-name">{{item.name}}</text>
+          <text class="quick-food-calories">{{item.calories}}kcal</text>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+
+  <!-- 浮动添加按钮 -->
+  <view class="fab-container">
+    <button class="fab-main {{fabExpanded ? 'expanded' : ''}}" bindtap="toggleFab">
+      <text class="fab-icon">{{fabExpanded ? '×' : '+'}}</text>
+    </button>
+    
+    <view class="fab-options {{fabExpanded ? 'show' : 'hide'}}">
+      <button class="fab-option" bindtap="searchFood">
+        <text class="option-icon">🔍</text>
+        <text class="option-text">搜索食物</text>
+      </button>
+      <button class="fab-option" bindtap="scanBarcode">
+        <text class="option-icon">📷</text>
+        <text class="option-text">扫码添加</text>
+      </button>
+      <button class="fab-option" bindtap="customFood">
+        <text class="option-icon">✏️</text>
+        <text class="option-text">自定义</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 食物搜索弹窗 -->
+  <view class="food-search-modal {{showSearchModal ? 'show' : 'hide'}}" catchtouchmove="true">
+    <view class="modal-backdrop" bindtap="closeSearchModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">搜索食物</text>
+        <button class="modal-close" bindtap="closeSearchModal">×</button>
+      </view>
+      <view class="modal-body">
+        <view class="search-input-wrapper">
+          <input 
+            class="search-input" 
+            placeholder="输入食物名称" 
+            value="{{searchKeyword}}" 
+            bindinput="onSearchInput"
+            bindconfirm="searchFood"
+            focus="{{searchFocus}}"
+          />
+          <button class="search-btn" bindtap="searchFood">搜索</button>
+        </view>
+        
+        <view class="search-results">
+          <block wx:for="{{searchResults}}" wx:key="id">
+            <view class="search-result-item" bindtap="selectFood" data-food="{{item}}">
+              <image class="result-image" src="{{item.image}}" />
+              <view class="result-info">
+                <text class="result-name">{{item.name}}</text>
+                <text class="result-calories">{{item.calories}} kcal/100g</text>
+                <text class="result-brand" wx:if="{{item.brand}}">{{item.brand}}</text>
+              </view>
+              <view class="result-action">
+                <text class="add-text">添加</text>
+              </view>
+            </view>
+          </block>
+          
+          <view class="search-empty" wx:if="{{searchResults.length === 0 && searchKeyword}}">
+            <text class="empty-text">未找到相关食物</text>
+            <button class="create-custom-btn" bindtap="createCustomFood">创建自定义食物</button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+</view>

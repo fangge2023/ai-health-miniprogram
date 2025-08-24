@@ -1,0 +1,465 @@
+/**app.wxss**/
+/* 全局样式 */
+page {
+  background-color: #f5f5f5;
+  font-family: -apple-system-font, Helvetica Neue, sans-serif;
+  color: #333;
+}
+
+/* 主题色彩变量 */
+.theme-primary {
+  color: #4CAF50;
+}
+
+.theme-primary-bg {
+  background-color: #4CAF50;
+}
+
+.theme-secondary {
+  color: #81C784;
+}
+
+.theme-secondary-bg {
+  background-color: #81C784;
+}
+
+.theme-accent {
+  color: #FF9800;
+}
+
+.theme-accent-bg {
+  background-color: #FF9800;
+}
+
+.theme-error {
+  color: #F44336;
+}
+
+.theme-error-bg {
+  background-color: #F44336;
+}
+
+.theme-success {
+  color: #4CAF50;
+}
+
+.theme-success-bg {
+  background-color: #4CAF50;
+}
+
+.theme-warning {
+  color: #FF9800;
+}
+
+.theme-warning-bg {
+  background-color: #FF9800;
+}
+
+/* 布局类 */
+.container {
+  padding: 20rpx;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-around {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* 间距类 */
+.margin-top-small {
+  margin-top: 10rpx;
+}
+
+.margin-top-medium {
+  margin-top: 20rpx;
+}
+
+.margin-top-large {
+  margin-top: 40rpx;
+}
+
+.margin-bottom-small {
+  margin-bottom: 10rpx;
+}
+
+.margin-bottom-medium {
+  margin-bottom: 20rpx;
+}
+
+.margin-bottom-large {
+  margin-bottom: 40rpx;
+}
+
+.padding-small {
+  padding: 10rpx;
+}
+
+.padding-medium {
+  padding: 20rpx;
+}
+
+.padding-large {
+  padding: 40rpx;
+}
+
+/* 文字类 */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-small {
+  font-size: 24rpx;
+}
+
+.text-medium {
+  font-size: 28rpx;
+}
+
+.text-large {
+  font-size: 32rpx;
+}
+
+.text-xl {
+  font-size: 36rpx;
+}
+
+.text-xxl {
+  font-size: 40rpx;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-light {
+  color: #999;
+}
+
+.text-dark {
+  color: #333;
+}
+
+/* 卡片样式 */
+.card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.card-body {
+  padding: 30rpx;
+}
+
+.card-footer {
+  padding: 20rpx 30rpx;
+  border-top: 1rpx solid #f0f0f0;
+  background-color: #fafafa;
+}
+
+/* 按钮样式 */
+.btn {
+  padding: 20rpx 40rpx;
+  border-radius: 50rpx;
+  font-size: 28rpx;
+  text-align: center;
+  border: none;
+  margin: 10rpx 0;
+}
+
+.btn-primary {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #45a049;
+}
+
+.btn-secondary {
+  background-color: #81C784;
+  color: #fff;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2rpx solid #4CAF50;
+  color: #4CAF50;
+}
+
+.btn-outline:hover {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+.btn-small {
+  padding: 15rpx 30rpx;
+  font-size: 24rpx;
+}
+
+.btn-large {
+  padding: 30rpx 60rpx;
+  font-size: 32rpx;
+}
+
+.btn-block {
+  width: 100%;
+  display: block;
+}
+
+.btn-disabled {
+  background-color: #ccc;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* 输入框样式 */
+.input-group {
+  margin-bottom: 30rpx;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 10rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.input {
+  width: 100%;
+  padding: 25rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+.input-error {
+  border-color: #F44336;
+}
+
+/* 列表样式 */
+.list {
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.list-item {
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  display: flex;
+  align-items: center;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+}
+
+.list-item-content {
+  flex: 1;
+}
+
+.list-item-title {
+  font-size: 30rpx;
+  color: #333;
+  margin-bottom: 5rpx;
+}
+
+.list-item-desc {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.list-item-arrow {
+  width: 20rpx;
+  height: 20rpx;
+  margin-left: 20rpx;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx;
+  color: #999;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #f3f3f3;
+  border-top: 4rpx solid #4CAF50;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 空状态 */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 60rpx;
+  color: #999;
+}
+
+.empty-icon {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* 数据统计卡片 */
+.stats-card {
+  background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
+  color: #fff;
+  padding: 40rpx;
+  border-radius: 16rpx;
+  margin-bottom: 30rpx;
+}
+
+.stats-number {
+  font-size: 48rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10rpx;
+}
+
+.stats-label {
+  font-size: 24rpx;
+  text-align: center;
+  opacity: 0.9;
+}
+
+/* 进度条 */
+.progress {
+  width: 100%;
+  height: 20rpx;
+  background-color: #e0e0e0;
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #4CAF50;
+  border-radius: 10rpx;
+  transition: width 0.3s ease;
+}
+
+/* 标签 */
+.tag {
+  display: inline-block;
+  padding: 8rpx 16rpx;
+  background-color: #f0f0f0;
+  color: #666;
+  font-size: 24rpx;
+  border-radius: 20rpx;
+  margin: 5rpx;
+}
+
+.tag-primary {
+  background-color: #E8F5E8;
+  color: #4CAF50;
+}
+
+.tag-warning {
+  background-color: #FFF3E0;
+  color: #FF9800;
+}
+
+.tag-error {
+  background-color: #FFEBEE;
+  color: #F44336;
+}
+
+/* 响应式 */
+@media (max-width: 480px) {
+  .container {
+    padding: 15rpx;
+  }
+  
+  .card-body {
+    padding: 20rpx;
+  }
+  
+  .card-header {
+    padding: 20rpx;
+    font-size: 28rpx;
+  }
+}

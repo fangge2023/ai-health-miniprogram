@@ -1,0 +1,226 @@
+<!--pages/food-search/food-search.wxml-->
+<view class="container">
+  <!-- 搜索区域 -->
+  <view class="search-section">
+    <view class="search-bar">
+      <view class="search-input-wrapper">
+        <input 
+          class="search-input" 
+          placeholder="输入食物名称、品牌或条码" 
+          value="{{searchKeyword}}"
+          bindinput="onSearchInput"
+          bindconfirm="searchFood"
+          focus="{{searchFocus}}"
+        />
+        <view class="search-icon" bindtap="searchFood">🔍</view>
+      </view>
+      <button class="scan-btn" bindtap="scanBarcode">📷</button>
+    </view>
+    
+    <!-- 搜索建议 -->
+    <view class="search-suggestions" wx:if="{{searchSuggestions.length > 0 && searchKeyword}}">
+      <scroll-view class="suggestions-scroll" scroll-x="true">
+        <view class="suggestions-list">
+          <block wx:for="{{searchSuggestions}}" wx:key="*this">
+            <view class="suggestion-item" bindtap="selectSuggestion" data-suggestion="{{item}}">
+              {{item}}
+            </view>
+          </block>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 分类标签 -->
+  <view class="category-section" wx:if="{{!searchKeyword}}">
+    <scroll-view class="category-scroll" scroll-x="true">
+      <view class="category-list">
+        <view class="category-item {{selectedCategory === 'all' ? 'active' : ''}}" bindtap="selectCategory" data-category="all">
+          🍽️ 全部
+        </view>
+        <block wx:for="{{categories}}" wx:key="id">
+          <view class="category-item {{selectedCategory === item.id ? 'active' : ''}}" bindtap="selectCategory" data-category="{{item.id}}">
+            {{item.icon}} {{item.name}}
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view class="search-results" wx:if="{{searchKeyword && searchResults.length > 0}}">
+    <view class="results-header">
+      <text class="results-count">找到 {{searchResults.length}} 个结果</text>
+      <view class="sort-options">
+        <text class="sort-item {{sortBy === 'relevance' ? 'active' : ''}}" bindtap="changeSortBy" data-sort="relevance">相关度</text>
+        <text class="sort-item {{sortBy === 'calories' ? 'active' : ''}}" bindtap="changeSortBy" data-sort="calories">热量</text>
+        <text class="sort-item {{sortBy === 'popularity' ? 'active' : ''}}" bindtap="changeSortBy" data-sort="popularity">热门</text>
+      </view>
+    </view>
+    
+    <view class="food-list">
+      <block wx:for="{{searchResults}}" wx:key="id">
+        <view class="food-item" bindtap="selectFood" data-food="{{item}}">
+          <image class="food-image" src="{{item.image || '/images/default-food.png'}}" />
+          <view class="food-info">
+            <text class="food-name">{{item.name}}</text>
+            <text class="food-brand" wx:if="{{item.brand}}">{{item.brand}}</text>
+            <view class="food-nutrition">
+              <text class="nutrition-item calories">{{item.calories}} kcal</text>
+              <text class="nutrition-item protein">蛋白 {{item.protein}}g</text>
+              <text class="nutrition-item carbs">碳水 {{item.carbs}}g</text>
+              <text class="nutrition-item fat">脂肪 {{item.fat}}g</text>
+            </view>
+            <view class="food-tags" wx:if="{{item.tags && item.tags.length > 0}}">
+              <block wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">
+                <text class="food-tag">{{tag}}</text>
+              </block>
+            </view>
+          </view>
+          <view class="food-action">
+            <text class="add-text">添加</text>
+          </view>
+        </view>
+      </block>
+    </view>
+    
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{hasMore}}">
+      <button class="load-more-btn" bindtap="loadMore" loading="{{loadingMore}}">
+        {{loadingMore ? '加载中...' : '加载更多'}}
+      </button>
+    </view>
+  </view>
+
+  <!-- 热门食物 -->
+  <view class="popular-foods" wx:if="{{!searchKeyword}}">
+    <view class="section-header">
+      <text class="section-title">热门食物</text>
+      <text class="section-more" bindtap="viewAllPopular">查看全部 ></text>
+    </view>
+    <view class="food-grid">
+      <block wx:for="{{popularFoods}}" wx:key="id">
+        <view class="popular-food-item" bindtap="selectFood" data-food="{{item}}">
+          <image class="popular-food-image" src="{{item.image || '/images/default-food.png'}}" />
+          <view class="popular-food-info">
+            <text class="popular-food-name">{{item.name}}</text>
+            <text class="popular-food-calories">{{item.calories}} kcal</text>
+            <view class="popular-food-rating">
+              <block wx:for="{{5}}" wx:for-index="starIndex" wx:key="*this">
+                <text class="star {{starIndex < item.rating ? 'filled' : ''}}">★</text>
+              </block>
+              <text class="rating-text">({{item.searchCount || 0}})</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 最近搜索 -->
+  <view class="recent-searches" wx:if="{{!searchKeyword && recentSearches.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">最近搜索</text>
+      <text class="clear-recent" bindtap="clearRecentSearches">清空</text>
+    </view>
+    <view class="recent-list">
+      <block wx:for="{{recentSearches}}" wx:key="*this">
+        <view class="recent-item" bindtap="searchRecent" data-keyword="{{item}}">
+          <text class="recent-text">{{item}}</text>
+          <view class="recent-time">🕰️</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 食物详情弹窗 -->
+  <view class="food-detail-modal {{showFoodDetail ? 'show' : 'hide'}}" catchtouchmove="true">
+    <view class="modal-backdrop" bindtap="closeFoodDetail"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{selectedFood.name}}</text>
+        <button class="modal-close" bindtap="closeFoodDetail">×</button>
+      </view>
+      
+      <view class="modal-body">
+        <view class="food-detail-image">
+          <image src="{{selectedFood.image || '/images/default-food.png'}}" />
+        </view>
+        
+        <view class="nutrition-detail">
+          <view class="portion-selector">
+            <text class="portion-label">份量选择</text>
+            <view class="portion-input">
+              <button class="portion-btn" bindtap="changeAmount" data-change="-10">-</button>
+              <input class="amount-input" type="number" value="{{selectedAmount}}" bindinput="onAmountInput" />
+              <text class="amount-unit">g</text>
+              <button class="portion-btn" bindtap="changeAmount" data-change="10">+</button>
+            </view>
+          </view>
+          
+          <view class="nutrition-table">
+            <view class="nutrition-row header">
+              <text class="nutrition-label">营养成分</text>
+              <text class="nutrition-value">每{{selectedAmount}}g</text>
+            </view>
+            <view class="nutrition-row">
+              <text class="nutrition-label">热量</text>
+              <text class="nutrition-value calories">{{calculatedNutrition.calories}} kcal</text>
+            </view>
+            <view class="nutrition-row">
+              <text class="nutrition-label">蛋白质</text>
+              <text class="nutrition-value">{{calculatedNutrition.protein}} g</text>
+            </view>
+            <view class="nutrition-row">
+              <text class="nutrition-label">碳水化合物</text>
+              <text class="nutrition-value">{{calculatedNutrition.carbs}} g</text>
+            </view>
+            <view class="nutrition-row">
+              <text class="nutrition-label">脂肪</text>
+              <text class="nutrition-value">{{calculatedNutrition.fat}} g</text>
+            </view>
+            <view class="nutrition-row" wx:if="{{selectedFood.fiber}}">
+              <text class="nutrition-label">膀食纤维</text>
+              <text class="nutrition-value">{{calculatedNutrition.fiber}} g</text>
+            </view>
+            <view class="nutrition-row" wx:if="{{selectedFood.sodium}}">
+              <text class="nutrition-label">钠</text>
+              <text class="nutrition-value">{{calculatedNutrition.sodium}} mg</text>
+            </view>
+          </view>
+          
+          <view class="meal-selector">
+            <text class="meal-label">添加到餐次</text>
+            <view class="meal-options">
+              <block wx:for="{{mealTypes}}" wx:key="type">
+                <view class="meal-option {{selectedMeal === item.type ? 'active' : ''}}" bindtap="selectMeal" data-meal="{{item.type}}">
+                  <text class="meal-icon">{{item.icon}}</text>
+                  <text class="meal-name">{{item.name}}</text>
+                </view>
+              </block>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="closeFoodDetail">取消</button>
+        <button class="modal-btn confirm" bindtap="confirmAddFood">添加到{{getMealName(selectedMeal)}}</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{searchKeyword && searchResults.length === 0 && !loading}}">
+    <view class="empty-icon">🔍</view>
+    <text class="empty-text">未找到相关食物</text>
+    <text class="empty-hint">试试其他关键词或扫码搜索</text>
+    <button class="create-custom-btn" bindtap="createCustomFood">创建自定义食物</button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>搜索中...</text>
+  </view>
+</view>

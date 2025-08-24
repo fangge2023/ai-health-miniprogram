@@ -1,0 +1,74 @@
+<!--pages/profile/profile.wxml-->
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-avatar">
+      <image class="avatar-img" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" />
+      <button class="avatar-edit" bindtap="changeAvatar">📷</button>
+    </view>
+    <view class="user-info">
+      <text class="user-name">{{userInfo.nickname || '未设置昵称'}}</text>
+      <text class="user-desc">{{userStatus}}</text>
+    </view>
+  </view>
+
+  <!-- 目标设置 -->
+  <view class="card">
+    <view class="card-header">减肥目标</view>
+    <view class="goal-item" bindtap="setGoal" data-type="weight">
+      <text class="goal-label">目标体重</text>
+      <text class="goal-value">{{goals.targetWeight || '未设置'}}kg</text>
+    </view>
+    <view class="goal-item" bindtap="setGoal" data-type="date">
+      <text class="goal-label">目标日期</text>
+      <text class="goal-value">{{goals.targetDate || '未设置'}}</text>
+    </view>
+  </view>
+
+  <!-- 基本信息 -->
+  <view class="card">
+    <view class="card-header">基本信息</view>
+    <view class="info-item" bindtap="editInfo" data-type="gender">
+      <text class="info-label">性别</text>
+      <text class="info-value">{{userInfo.gender || '未设置'}}</text>
+    </view>
+    <view class="info-item" bindtap="editInfo" data-type="age">
+      <text class="info-label">年龄</text>
+      <text class="info-value">{{userInfo.age || '未设置'}}岁</text>
+    </view>
+    <view class="info-item" bindtap="editInfo" data-type="height">
+      <text class="info-label">身高</text>
+      <text class="info-value">{{userInfo.height || '未设置'}}cm</text>
+    </view>
+  </view>
+
+  <!-- 设置选项 -->
+  <view class="card">
+    <view class="card-header">设置</view>
+    <view class="setting-item" bindtap="openSetting" data-type="notification">
+      <text class="setting-label">消息通知</text>
+      <switch checked="{{settings.notification}}" bindchange="toggleSetting" data-type="notification" />
+    </view>
+    <view class="setting-item" bindtap="openSetting" data-type="privacy">
+      <text class="setting-label">隐私设置</text>
+      <text class="setting-arrow">></text>
+    </view>
+  </view>
+
+  <!-- 其他功能 -->
+  <view class="card">
+    <view class="card-header">其他</view>
+    <view class="function-item" bindtap="exportData">
+      <text class="function-label">导出数据</text>
+      <text class="function-arrow">></text>
+    </view>
+    <view class="function-item" bindtap="feedback">
+      <text class="function-label">意见反馈</text>
+      <text class="function-arrow">></text>
+    </view>
+    <view class="function-item" bindtap="about">
+      <text class="function-label">关于应用</text>
+      <text class="function-arrow">></text>
+    </view>
+  </view>
+</view>

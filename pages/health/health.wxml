@@ -1,0 +1,52 @@
+<!--pages/health/health.wxml-->
+<view class="container">
+  <!-- 健康概览 -->
+  <view class="health-overview">
+    <view class="overview-card">
+      <text class="card-title">健康指标</text>
+      <view class="metrics-grid">
+        <view class="metric-item">
+          <text class="metric-value">{{healthData.bmi}}</text>
+          <text class="metric-label">BMI</text>
+        </view>
+        <view class="metric-item">
+          <text class="metric-value">{{healthData.weight}}</text>
+          <text class="metric-label">体重(kg)</text>
+        </view>
+        <view class="metric-item">
+          <text class="metric-value">{{healthData.bodyFat}}</text>
+          <text class="metric-label">体脂率(%)</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 数据图表 -->
+  <view class="chart-section">
+    <view class="chart-tabs">
+      <text class="tab-item {{activeTab === 'weight' ? 'active' : ''}}" bindtap="switchTab" data-tab="weight">体重</text>
+      <text class="tab-item {{activeTab === 'bmi' ? 'active' : ''}}" bindtap="switchTab" data-tab="bmi">BMI</text>
+      <text class="tab-item {{activeTab === 'bodyFat' ? 'active' : ''}}" bindtap="switchTab" data-tab="bodyFat">体脂率</text>
+    </view>
+    <view class="chart-container">
+      <ec-canvas id="health-chart" canvas-id="health-chart" ec="{{ healthChart }}"></ec-canvas>
+    </view>
+  </view>
+
+  <!-- 数据记录 -->
+  <view class="data-records">
+    <view class="section-title">历史记录</view>
+    <block wx:for="{{healthRecords}}" wx:key="id">
+      <view class="record-item">
+        <view class="record-date">{{item.date}}</view>
+        <view class="record-data">
+          <text>体重: {{item.weight}}kg</text>
+          <text>BMI: {{item.bmi}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 添加记录按钮 -->
+  <button class="add-record-btn" bindtap="addHealthRecord">添加记录</button>
+</view>

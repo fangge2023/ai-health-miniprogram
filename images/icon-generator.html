@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信小程序图标生成器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .icon-item {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .icon-item:hover {
+            border-color: #4CAF50;
+            background-color: #f0f8f0;
+        }
+        .icon-item.active {
+            border-color: #4CAF50;
+            background-color: #e8f5e8;
+        }
+        .icon-preview {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 10px;
+            background-color: #666;
+            position: relative;
+        }
+        .icon-preview.active {
+            background-color: #4CAF50;
+        }
+        .icon-name {
+            font-size: 14px;
+            color: #666;
+        }
+        .download-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .instructions {
+            background-color: #f0f8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+        .canvas-container {
+            display: none;
+        }
+        .size-selector {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .size-selector label {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 微信小程序图标生成器</h1>
+        
+        <div class="instructions">
+            <h3>📝 使用说明</h3>
+            <ol>
+                <li>选择需要的图标类型</li>
+                <li>选择图标尺寸（普通/激活状态）</li>
+                <li>点击"生成图标"按钮</li>
+                <li>右键保存生成的图标到项目的images目录</li>
+            </ol>
+        </div>
+
+        <div class="size-selector">
+            <label>
+                <input type="radio" name="size" value="normal" checked> 普通状态 (24x24)
+            </label>
+            <label>
+                <input type="radio" name="size" value="active"> 激活状态 (24x24)
+            </label>
+        </div>
+
+        <div class="icon-grid">
+            <div class="icon-item" data-icon="home">
+                <div class="icon-preview" id="home-preview"></div>
+                <div class="icon-name">首页 (home)</div>
+            </div>
+            <div class="icon-item" data-icon="ai">
+                <div class="icon-preview" id="ai-preview"></div>
+                <div class="icon-name">AI咨询 (ai)</div>
+            </div>
+            <div class="icon-item" data-icon="diet">
+                <div class="icon-preview" id="diet-preview"></div>
+                <div class="icon-name">饮食 (diet)</div>
+            </div>
+            <div class="icon-item" data-icon="exercise">
+                <div class="icon-preview" id="exercise-preview"></div>
+                <div class="icon-name">运动 (exercise)</div>
+            </div>
+            <div class="icon-item" data-icon="profile">
+                <div class="icon-preview" id="profile-preview"></div>
+                <div class="icon-name">我的 (profile)</div>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <button class="btn" onclick="generateIcon()">🎨 生成选中的图标</button>
+            <button class="btn" onclick="generateAllIcons()">📦 生成所有图标</button>
+            <a href="#" class="btn" id="downloadLink" style="display:none;">💾 下载图标</a>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="iconCanvas" width="24" height="24"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let selectedIcon = 'home';
+        let selectedSize = 'normal';
+
+        // 图标定义
+        const icons = {
+            home: {
+                normal: '#666666',
+                active: '#4CAF50',
+                draw: (ctx, color) => {
+                    // 绘制房子图标
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    // 屋顶
+                    ctx.moveTo(12, 3);
+                    ctx.lineTo(21, 12);
+                    ctx.lineTo(3, 12);
+                    ctx.closePath();
+                    ctx.fill();
+                    // 房子主体
+                    ctx.fillRect(5, 12, 14, 9);
+                    // 门
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(10, 15, 4, 6);
+                }
+            },
+            ai: {
+                normal: '#666666',
+                active: '#4CAF50',
+                draw: (ctx, color) => {
+                    // 绘制AI机器人图标
+                    ctx.fillStyle = color;
+                    // 头部
+                    ctx.fillRect(8, 4, 8, 6);
+                    // 身体
+                    ctx.fillRect(6, 10, 12, 8);
+                    // 眼睛
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(9, 6, 2, 2);
+                    ctx.fillRect(13, 6, 2, 2);
+                    // 天线
+                    ctx.fillStyle = color;
+                    ctx.fillRect(11, 2, 2, 2);
+                }
+            },
+            diet: {
+                normal: '#666666',
+                active: '#4CAF50',
+                draw: (ctx, color) => {
+                    // 绘制餐具图标
+                    ctx.fillStyle = color;
+                    // 盘子
+                    ctx.beginPath();
+                    ctx.arc(12, 12, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                    // 内圈
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath();
+                    ctx.arc(12, 12, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                    // 叉子
+                    ctx.fillStyle = color;
+                    ctx.fillRect(8, 8, 1, 8);
+                    ctx.fillRect(7, 8, 1, 3);
+                    ctx.fillRect(9, 8, 1, 3);
+                }
+            },
+            exercise: {
+                normal: '#666666',
+                active: '#4CAF50',
+                draw: (ctx, color) => {
+                    // 绘制运动图标
+                    ctx.fillStyle = color;
+                    // 头
+                    ctx.beginPath();
+                    ctx.arc(12, 7, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    // 身体
+                    ctx.fillRect(10, 10, 4, 6);
+                    // 手臂
+                    ctx.fillRect(6, 11, 4, 2);
+                    ctx.fillRect(14, 11, 4, 2);
+                    // 腿
+                    ctx.fillRect(9, 16, 2, 5);
+                    ctx.fillRect(13, 16, 2, 5);
+                }
+            },
+            profile: {
+                normal: '#666666',
+                active: '#4CAF50',
+                draw: (ctx, color) => {
+                    // 绘制用户图标
+                    ctx.fillStyle = color;
+                    // 头
+                    ctx.beginPath();
+                    ctx.arc(12, 8, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                    // 身体
+                    ctx.beginPath();
+                    ctx.arc(12, 20, 7, Math.PI, 0, true);
+                    ctx.fill();
+                }
+            }
+        };
+
+        // 选择图标
+        document.querySelectorAll('.icon-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.icon-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                selectedIcon = item.dataset.icon;
+                updatePreview();
+            });
+        });
+
+        // 选择尺寸
+        document.querySelectorAll('input[name="size"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                selectedSize = radio.value;
+                updatePreview();
+            });
+        });
+
+        // 更新预览
+        function updatePreview() {
+            document.querySelectorAll('.icon-preview').forEach(preview => {
+                const iconType = preview.id.replace('-preview', '');
+                preview.classList.remove('active');
+                if (iconType === selectedIcon && selectedSize === 'active') {
+                    preview.classList.add('active');
+                }
+            });
+        }
+
+        // 生成单个图标
+        function generateIcon() {
+            if (!selectedIcon) {
+                alert('请先选择一个图标');
+                return;
+            }
+
+            const canvas = document.getElementById('iconCanvas');
+            const ctx = canvas.getContext('2d');
+            const icon = icons[selectedIcon];
+            const color = selectedSize === 'active' ? icon.active : icon.normal;
+
+            // 清空画布
+            ctx.clearRect(0, 0, 24, 24);
+            
+            // 绘制图标
+            icon.draw(ctx, color);
+
+            // 创建下载链接
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const link = document.getElementById('downloadLink');
+                link.href = url;
+                link.download = `tab-${selectedIcon}${selectedSize === 'active' ? '-active' : ''}.png`;
+                link.style.display = 'inline-block';
+                link.textContent = `💾 下载 ${selectedIcon}${selectedSize === 'active' ? '-active' : ''}.png`;
+            });
+        }
+
+        // 生成所有图标
+        function generateAllIcons() {
+            const canvas = document.getElementById('iconCanvas');
+            const ctx = canvas.getContext('2d');
+            const zip = new JSZip();
+
+            Object.keys(icons).forEach(iconName => {
+                ['normal', 'active'].forEach(state => {
+                    const icon = icons[iconName];
+                    const color = state === 'active' ? icon.active : icon.normal;
+
+                    // 清空画布
+                    ctx.clearRect(0, 0, 24, 24);
+                    
+                    // 绘制图标
+                    icon.draw(ctx, color);
+
+                    // 转换为数据URL
+                    const dataURL = canvas.toDataURL('image/png');
+                    const data = dataURL.split(',')[1];
+                    zip.file(`tab-${iconName}${state === 'active' ? '-active' : ''}.png`, data, {base64: true});
+                });
+            });
+
+            // 下载ZIP文件
+            zip.generateAsync({type:"blob"}).then(content => {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(content);
+                link.download = "miniprogram-icons.zip";
+                link.click();
+            });
+        }
+
+        // 初始化
+        document.querySelector('.icon-item').classList.add('active');
+        updatePreview();
+    </script>
+</body>
+</html>

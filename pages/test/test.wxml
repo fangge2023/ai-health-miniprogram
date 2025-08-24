@@ -1,0 +1,17 @@
+<!--pages/test/test.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">页面测试</text>
+  </view>
+  
+  <view class="content">
+    <text class="message">{{message}}</text>
+    <text class="timestamp">加载时间: {{timestamp}}</text>
+    
+    <button class="test-btn" bindtap="testButton">点击测试</button>
+  </view>
+  
+  <view class="info">
+    <text>如果你能看到这个页面，说明基础功能正常</text>
+  </view>
+</view>

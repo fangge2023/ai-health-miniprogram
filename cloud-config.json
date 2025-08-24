@@ -1,0 +1,39 @@
+{
+  "functions": [
+    {
+      "name": "ai-chat",
+      "runtime": "Nodejs18.15",
+      "timeout": 20,
+      "memorySize": 256,
+      "description": "AI聊天服务，处理用户与AI的对话交互"
+    },
+    {
+      "name": "get-food-data",
+      "runtime": "Nodejs18.15",
+      "timeout": 20,
+      "memorySize": 256,
+      "description": "获取食物营养数据，支持搜索和营养计算"
+    },
+    {
+      "name": "get-user-data",
+      "runtime": "Nodejs18.15",
+      "timeout": 20,
+      "memorySize": 256,
+      "description": "获取用户数据，包括健康数据、饮食记录等"
+    },
+    {
+      "name": "update-user-data",
+      "runtime": "Nodejs18.15",
+      "timeout": 20,
+      "memorySize": 256,
+      "description": "更新用户数据，包括个人信息、健康指标等"
+    },
+    {
+      "name": "record-exercise",
+      "runtime": "Nodejs18.15",
+      "timeout": 20,
+      "memorySize": 256,
+      "description": "记录用户运动数据，计算消耗热量"
+    }
+  ]
+}
