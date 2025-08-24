@@ -402,21 +402,27 @@ Page({
       clearInterval(this.data.timer);
     }
     
+    const startTime = this.data.startTime || new Date();
+    const initialElapsedTime = this.data.elapsedTime || 0;
+    
     const timer = setInterval(() => {
-      this.updateTimer();
+      this.updateTimer(startTime, initialElapsedTime);
     }, 1000);
     
     this.setData({
       timer,
       isRunning: true,
-      startTime: new Date()
+      startTime: startTime
     });
   },
 
   // 更新计时器
-  updateTimer() {
-    const elapsedTime = this.data.elapsedTime + 1;
-    const currentCalories = Math.round((this.data.currentExercise.caloriesPerMin * elapsedTime) / 60);
+  updateTimer(startTime, initialElapsedTime) {
+    const now = new Date();
+    const elapsedSeconds = Math.floor((now - startTime) / 1000);
+    const totalElapsedTime = initialElapsedTime + elapsedSeconds;
+    
+    const currentCalories = Math.round((this.data.currentExercise.caloriesPerMin * totalElapsedTime) / 60);
     
     this.setData({
       elapsedTime,
@@ -446,7 +452,14 @@ Page({
 
   // 恢复计时器
   resumeTimer() {
-    this.startTimer();
+    const currentTime = new Date();
+    const pausedTime = this.data.elapsedTime || 0;
+    
+    this.setData({
+      startTime: new Date(currentTime.getTime() - pausedTime * 1000)
+    }, () => {
+      this.startTimer();
+    });
   },
 
   // 停止运动

@@ -3,6 +3,13 @@
   "enablePullDownRefresh": true,
   "backgroundColor": "#f5f5f5",
   "usingComponents": {
-    "ec-canvas": "../../ec-canvas/ec-canvas"
+    "ec-canvas": "../../ec-canvas/ec-canvas",
+    "t-button": "../../miniprogram_npm/tdesign-miniprogram/button/button",
+    "t-progress": "../../miniprogram_npm/tdesign-miniprogram/progress/progress",
+    "t-icon": "../../miniprogram_npm/tdesign-miniprogram/icon/icon",
+    "t-grid": "../../miniprogram_npm/tdesign-miniprogram/grid/grid",
+    "t-grid-item": "../../miniprogram_npm/tdesign-miniprogram/grid-item/grid-item",
+    "t-swiper": "../../miniprogram_npm/tdesign-miniprogram/swiper/swiper",
+    "t-swiper-nav": "../../miniprogram_npm/tdesign-miniprogram/swiper-nav/swiper-nav"
   }
 }

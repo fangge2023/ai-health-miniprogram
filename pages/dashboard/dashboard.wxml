@@ -134,32 +134,7 @@
     </view>
     
     <view class="chart-container">
-      <!-- 这里可以放置图表组件 -->
-      <view class="chart-placeholder">
-        <view class="bar-chart">
-          <view class="chart-bar" style="height: 30%;">
-            <text class="bar-label">一</text>
-          </view>
-          <view class="chart-bar" style="height: 45%;">
-            <text class="bar-label">二</text>
-          </view>
-          <view class="chart-bar" style="height: 60%;">
-            <text class="bar-label">三</text>
-          </view>
-          <view class="chart-bar" style="height: 40%;">
-            <text class="bar-label">四</text>
-          </view>
-          <view class="chart-bar" style="height: 70%;">
-            <text class="bar-label">五</text>
-          </view>
-          <view class="chart-bar" style="height: 50%;">
-            <text class="bar-label">六</text>
-          </view>
-          <view class="chart-bar active" style="height: 65%;">
-            <text class="bar-label">日</text>
-          </view>
-        </view>
-      </view>
+      <ec-canvas id="weekly-chart" canvas-id="weekly-chart" ec="{{ec}}"></ec-canvas>
     </view>
   </view>
 </view>

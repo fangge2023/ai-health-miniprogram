@@ -59,18 +59,32 @@ App({
     });
 
     updateManager.onUpdateFailed(function () {
-      // 新版本下载失败
+     极 // 新版本下载失败
       console.log('新版本下载失败');
     });
   },
 
   // 获取系统信息
   getSystemInfo() {
-    wx.getSystemInfo({
-      success: (res) => {
-        this.globalData.systemInfo = res;
-      }
-    });
+    // 使用新的API获取系统信息
+    const systemInfo = {};
+    
+    // 获取基础信息
+    const appBaseInfo = wx.getAppBaseInfo();
+    // 获取设备信息
+    const deviceInfo = wx.getDeviceInfo();
+    // 获取窗口信息
+    const windowInfo = wx.getWindowInfo();
+    // 获取系统设置
+    const systemSetting = wx.getSystemSetting();
+    // 获取授权设置
+    const appAuthorizeSetting = wx.getAppAuthorizeSetting();
+    
+    // 合并所有信息
+    Object.assign(systemInfo, appBaseInfo, deviceInfo, windowInfo, systemSetting, {authSetting: appAuthorizeSetting});
+    
+    // 保存到全局数据
+    this.globalData.systemInfo = systemInfo;
   },
 
   // 更新当前日期
@@ -95,9 +109,21 @@ App({
     return new Promise((resolve, reject) => {
       wx.getUserProfile({
         desc: '用于完善会员资料',
-        success: (res) => {
+        success: async (res) => {
           this.globalData.userInfo = res.userInfo;
           this.globalData.isLoggedIn = true;
+          
+          // 调用云函数记录用户登录信息到数据库
+          try {
+            const loginResult = await this.callCloudFunction('handle-user-login', {
+              userInfo: res.userInfo,
+              action: 'login'
+            });
+            console.log('用户登录记录成功:', loginResult);
+          } catch (error) {
+            console.warn('用户登录记录失败，使用本地模式:', error);
+          }
+          
           resolve(res.userInfo);
         },
         fail: reject
@@ -130,7 +156,7 @@ App({
     const mockResults = {
       'ai-chat': {
         success: true,
-        aiResponse: '这是模拟的AI回复。请配置云开发环境后使用真实的AI服务。'
+        aiResponse: '这是模拟的AI回复。请配置云开发环境后使用真实的极服务。'
       },
       'get-user-data': {
         success: true,

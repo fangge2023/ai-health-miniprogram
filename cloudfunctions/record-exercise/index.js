@@ -67,7 +67,10 @@ async function recordExercise(userId, exerciseData) {
     caloriesBurned: exerciseData.caloriesBurned || 0,
     distance: exerciseData.distance || 0,
     steps: exerciseData.steps || 0,
-    notes: exerciseData.notes || ''
+    notes: exerciseData.notes || '',
+    icon: exerciseData.icon || '',
+    metValue: exerciseData.metValue || 0,
+    heartRate: exerciseData.heartRate || 0
   };
 
   if (existingResult.data.length > 0) {

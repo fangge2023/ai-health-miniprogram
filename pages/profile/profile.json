@@ -1,4 +1,14 @@
 {
   "navigationBarTitleText": "个人资料",
-  "backgroundColor": "#f5f5f5"
+  "backgroundColor": "#f5f5f5",
+  "usingComponents": {
+    "t-button": "../../miniprogram_npm/tdesign-miniprogram/button/button",
+    "t-cell": "../../miniprogram_npm/tdesign-miniprogram/cell/cell",
+    "t-cell-group": "../../miniprogram_npm/tdesign-miniprogram/cell-group/cell-group",
+    "t-icon": "../../miniprogram_npm/tdesign-miniprogram/icon/icon",
+    "t-input": "../../miniprogram_npm/tdesign-miniprogram/input/input",
+    "t-tag": "../../miniprogram_npm/tdesign-miniprogram/tag/tag",
+    "t-dialog": "../../miniprogram_npm/tdesign-miniprogram/dialog/dialog",
+    "t-upload": "../../miniprogram_npm/tdesign-miniprogram/upload/upload"
+  }
 }

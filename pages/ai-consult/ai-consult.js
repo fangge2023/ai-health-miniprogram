@@ -136,6 +136,13 @@ Page({
       
     } catch (error) {
       console.error('发送消息失败:', error);
+      
+      // 添加错误消息
+      await this.addAIMessage({
+        aiResponse: '抱歉，消息发送失败，请检查网络连接后重试。',
+        error: true
+      });
+      
       this.setData({ 
         errorMessage: '发送失败，请重试',
         sending: false,
@@ -199,7 +206,8 @@ Page({
       time: util.formatDate(new Date(), 'HH:mm'),
       suggestions: result.suggestions || [],
       liked: false,
-      typing: true,
+      error: result.error || false,
+      typing: !result.error, // 错误消息不需要打字机效果
       typingText: ''
     };
 
@@ -209,8 +217,10 @@ Page({
       messageCounter: this.data.messageCounter + 1
     });
 
-    // 开始打字机效果
-    await this.startTypingEffect(aiMessage.id, result.aiResponse);
+    if (!result.error) {
+      // 开始打字机效果（仅对正常消息）
+      await this.startTypingEffect(aiMessage.id, result.aiResponse);
+    }
     this.scrollToBottom();
   },
 

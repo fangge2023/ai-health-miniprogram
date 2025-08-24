@@ -20,7 +20,7 @@ Page({
       '每天保持7-8小时的充足睡眠，有助于调节荷尔蒙平衡，减少食欲增加。',
       '选择全谷物、蔬菜和蛋白质丰富的食物，可以让你更长时间感到饱腹。',
       '记录你的饮食和运动情况，可以帮助你更好地了解自己的健康习惯并做出改进。'
-    ]
+    ],
   },
 
   onLoad: function (options) {
@@ -34,6 +34,7 @@ Page({
     this.getUserData();
   },
 
+
   setTodayDate: function () {
     const today = new Date();
     const year = today.getFullYear();
@@ -46,6 +47,8 @@ Page({
       todayDate: `${year}年${month}月${day}日 星期${weekday}`
     });
   },
+
+
 
   getRandomTip: function () {
     const randomIndex = Math.floor(Math.random() * this.data.healthTips.length);

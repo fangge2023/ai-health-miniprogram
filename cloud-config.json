@@ -34,6 +34,27 @@
       "timeout": 20,
       "memorySize": 256,
       "description": "记录用户运动数据，计算消耗热量"
+    },
+    {
+      "name": "handle-user-login",
+      "runtime": "极js18.15",
+      "timeout": 20,
+      "memorySize": 256,
+      "description": "处理用户登录和注册，记录用户信息到数据库"
+    },
+    {
+      "name": "upload-file",
+      "runtime": "Nodejs18.15",
+      "timeout": 20,
+      "memorySize": 256,
+      "description": "文件上传服务，处理图片等文件上传到云存储"
+    },
+    {
+      "name": "record-diet",
+      "runtime": "Nodejs18.15",
+      "timeout": 20,
+      "memorySize": 256,
+      "description": "记录用户饮食数据，计算营养摄入"
     }
   ]
 }

@@ -41,6 +41,7 @@
   },
   "homepage": "https://github.com/your-username/ai-health-miniprogram#readme",
   "dependencies": {
-    "canvas": "^3.2.0"
+    "canvas": "^3.2.0",
+    "tdesign-miniprogram": "^1.10.1"
   }
 }
